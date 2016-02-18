@@ -20,9 +20,14 @@ class StackOverflowSpider(scrapy.Spider):
 			if((item['name'].isspace()) 
 				or (item['name'] == '')):
 				item['name'] = ''.join(station.xpath('./td[1]/div/*/a/text()').extract())
-
-				"""Make a function that Recursively go through to make sure that no name is empty"""
 			
+			imgsrcPath = './td[1]/div/*/img'
+			item['lines'] = ''.join(station.xpath(imgsrcPath+'/@src').extract())
+			if((item['lines'].isspace()) 
+				or (item['lines'] == '')):
+				imgsrcPath = './td[1]/div/img'
+				item['lines'] = ''.join(station.xpath(imgsrcPath+'/@src').extract())
+
 			item['2009_ridership'] = ''.join(station.xpath('./td[2]/text()').extract())
 			item['2010_ridership'] = ''.join(station.xpath('./td[3]/text()').extract())
 			item['2011_ridership'] = ''.join(station.xpath('./td[4]/text()').extract())

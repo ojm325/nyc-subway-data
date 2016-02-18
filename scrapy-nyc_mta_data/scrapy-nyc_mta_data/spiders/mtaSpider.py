@@ -26,7 +26,16 @@ class StackOverflowSpider(scrapy.Spider):
 			if((item['lines'].isspace()) 
 				or (item['lines'] == '')):
 				imgsrcPath = './td[1]/div/img'
-				item['lines'] = ''.join(station.xpath(imgsrcPath+'/@src').extract())
+			
+			subway_lines = station.xpath(imgsrcPath)
+			lines = []
+
+			for line in subway_lines:
+				tempLine = ''.join(line.xpath('./@src').extract())
+				"""tempLine.index(tempLine, beg=len(tempLine)-6 end=len(tempLine)-4)"""
+				lines.append(tempLine[len(tempLine)-5:len(tempLine)-4])
+
+			item['lines'] = lines
 
 			item['2009_ridership'] = ''.join(station.xpath('./td[2]/text()').extract())
 			item['2010_ridership'] = ''.join(station.xpath('./td[3]/text()').extract())
